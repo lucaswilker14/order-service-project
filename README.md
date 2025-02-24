@@ -17,8 +17,10 @@ Este projeto é um serviço de pedidos escalável e eficiente, projetado para pr
 
 ## Arquitetura
 
-O sistema segue uma **arquitetura baseada em microsserviços**, utilizando um banco NoSQL para armazenar pedidos e um cache Redis para otimizar acessos frequentes.
+O sistema segue uma **arquitetura híbrida baseada em microsserviços**, utilizando um banco uma conexão com o sistema A por meio de HTTP REST
+e no sistema B, Kafka. NoSQL para armazenar pedidos e um cache Redis para otimizar acessos frequentes.
 
+![Texto Alternativo](order-service.drawio.png)
 ---
 
 ## Configuração do Ambiente
