@@ -3,6 +3,7 @@ package com.app.orderserviceproject.adapter.exception;
 import com.app.orderserviceproject.domain.exceptions.OrderDuplicateException;
 import com.app.orderserviceproject.domain.exceptions.OrderNotFoundException;
 import com.app.orderserviceproject.domain.exceptions.OrderStatusInvalidException;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MissingRequestHeaderException;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
+@Hidden
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)

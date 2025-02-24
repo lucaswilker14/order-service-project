@@ -41,9 +41,17 @@ logging:
 
 springdoc:
   api-docs:
+    enabled: true
     path: /v3/api-docs
   swagger-ui:
-    path: /swagger-ui.html
+    enabled: true
+    path: /swagger-ui
+  model-converters:
+    pageable-converter:
+      enabled: true
+  show-actuator: true
+  override-with-generic-response: false
+
 
 
 

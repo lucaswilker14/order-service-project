@@ -20,7 +20,7 @@ Este projeto é um serviço de pedidos escalável e eficiente, projetado para pr
 O sistema segue uma **arquitetura híbrida baseada em microsserviços**, utilizando um banco uma conexão com o sistema A por meio de HTTP REST
 e no sistema B, Kafka. NoSQL para armazenar pedidos e um cache Redis para otimizar acessos frequentes.
 
-![Texto Alternativo](order-service.drawio.png)
+![Imagem](order-service.drawio.png)
 ---
 
 ## Configuração do Ambiente
@@ -39,6 +39,17 @@ e no sistema B, Kafka. NoSQL para armazenar pedidos e um cache Redis para otimiz
    ```
 
 3. A API estará disponível em `http://localhost:8080/v1/api`.
+---
+## Documentação da API - Swagger UI
+
+Este projeto inclui uma documentação interativa da API utilizando **Swagger UI**, facilitando a exploração e testes dos endpoints disponíveis.
+
+### 🔗 Acessando o Swagger UI
+
+Após subir a aplicação, a documentação pode ser acessada através do seguinte link:
+
+👉 **[Swagger UI - API Documentation](http://localhost:8080/v1/api/swagger-ui/index.html)**
+
 ---
 
 ## Endpoints Principais
