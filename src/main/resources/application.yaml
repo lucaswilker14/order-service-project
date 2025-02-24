@@ -1,0 +1,50 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /v1/api
+
+spring:
+  application:
+    name: order-service-project
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/order-db
+      auto-index-creation: true
+      port: 27017
+    redis:
+      database: 0
+      host: localhost
+      port: 6379
+      connect-timeout: 60000
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 10
+          min-idle: 2
+  cache:
+    type: redis
+    cache-names: order-service-cache
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        topic: order-service-topic
+
+logging:
+  level:
+    root: INFO
+    com.app.orderserviceproject: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+
+
+

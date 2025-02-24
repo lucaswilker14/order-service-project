@@ -1,0 +1,162 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Order Service API",
+    "description": "API para gerenciamento de pedidos",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/orders": {
+      "get": {
+        "summary": "Buscar todos os pedidos",
+        "description": "Retorna a lista de todos os pedidos disponíveis.",
+        "responses": {
+          "200": {
+            "description": "Lista de pedidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar um pedido",
+        "description": "Cria um novo pedido com os dados fornecidos.",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chave de idempotência para evitar duplicações"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Pedido criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseCreateDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/order/{externalId}": {
+      "get": {
+        "summary": "Buscar um pedido por externalId",
+        "description": "Retorna um pedido específico pelo seu externalId.",
+        "parameters": [
+          {
+            "name": "externalId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID externo do pedido"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/status/{status}": {
+      "get": {
+        "summary": "Buscar pedidos por status",
+        "description": "Retorna uma lista de pedidos com um determinado status.",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Status do pedido a ser buscado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de pedidos encontrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "OrderDTO": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "externalId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/OrderItemDTO" }
+          },
+          "totalPrice": { "type": "number", "format": "double" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "OrderItemDTO": {
+        "type": "object",
+        "properties": {
+          "productId": { "type": "integer" },
+          "productName": { "type": "string" },
+          "quantity": { "type": "integer" },
+          "price": { "type": "number", "format": "double" }
+        }
+      },
+      "ResponseCreateDTO": {
+        "type": "object",
+        "properties": {
+          "idempotencyKey": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      }
+    }
+  }
+}
