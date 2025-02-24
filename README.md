@@ -4,7 +4,7 @@ Este projeto é um serviço de pedidos escalável e eficiente, projetado para pr
 
 ---
 
-## 🚀 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Spring Boot** - Framework principal para desenvolvimento.
 - **Redis** - Utilizado como cache para otimizar a recuperação de dados e reduzir carga no banco.
@@ -15,13 +15,13 @@ Este projeto é um serviço de pedidos escalável e eficiente, projetado para pr
 
 ---
 
-## 🏗 Arquitetura
+## Arquitetura
 
 O sistema segue uma **arquitetura baseada em microsserviços**, utilizando um banco NoSQL para armazenar pedidos e um cache Redis para otimizar acessos frequentes.
 
 ---
 
-## 📖 Configuração do Ambiente
+## Configuração do Ambiente
 
 ### 🐳 Rodando com Docker Compose
 
@@ -37,41 +37,24 @@ O sistema segue uma **arquitetura baseada em microsserviços**, utilizando um ba
    ```
 
 3. A API estará disponível em `http://localhost:8080`.
-
 ---
 
-### 🏃‍♂️ Rodando Manualmente (Sem Docker)
+## Endpoints Principais
 
-1. **Suba um banco MongoDB e um Redis localmente**
+## Criar um Pedido (POST /orders)
 
-    - No **MongoDB**:
-      ```sh
-      docker run --name mongo -d -p 27017:27017 mongo
-      ```
-    - No **Redis**:
-      ```sh
-      docker run --name redis -d -p 6379:6379 redis
-      ```
+Este endpoint permite a criação de um novo pedido. Para garantir a idempotência (evitar duplicação acidental), um cabeçalho `Idempotency-Key` deve ser enviado em cada requisição.
 
-2. **Configure as variáveis de ambiente**
-   ```sh
-   export SPRING_DATA_MONGODB_URI=mongodb://localhost:27017/orders
-   export SPRING_REDIS_HOST=localhost
-   ```
+### **📌 Requisição**
+**URL:**  
+`POST /orders`
 
-3. **Execute a aplicação**
-   ```sh
-   ./mvnw spring-boot:run
-   ```
-
----
-
-## 📡 Endpoints Principais
-
-### Criar um Pedido
+**Headers:**
 ```http
-POST /api/orders
-```
+Content-Type: application/json
+Idempotency-Key: a1b2c3d4-e5f6-7890-ab12-cd34ef56gh78
+````
+
 #### Request Body
 ```json
 {
@@ -93,26 +76,85 @@ POST /api/orders
 GET /api/orders/{externalId}
 ```
 
-
 ---
-## 📊 Testes de Carga com JMeter
+## 🛠 Testando com JMeter (Adicionando Idempotency-Key Dinâmico)
 
-1. **Baixe o JMeter**: [Apache JMeter](https://jmeter.apache.org/)
-2. **Configure um Header dinâmico** para **Idempotency-Key** no **Thread Group**:
-    - Use a função do JMeter:
-      ```jmeter
-      ${__UUID}
-      ```
-3. **Torne o `externalId` dinâmico** no body:
-    - No **PreProcessor (JSR223)**, adicione:
+Para testar a criação de pedidos no **JMeter**, precisamos adicionar um **header dinâmico** para a chave de idempotência. Isso evita que requisições consecutivas sejam rejeitadas por reutilização da mesma chave.
+
+### **📌 Configuração no JMeter**
+1. **Criar um Test Plan**
+   - Abra o **Apache JMeter** e crie um novo **Test Plan**.
+
+
+2. **Adicionar um Thread Group**
+   - Clique com o botão direito no **Test Plan** → `Add` → `Threads (Users)` → `Thread Group`.
+
+
+3. **Criar um HTTP Request**
+   - Dentro do **Thread Group**, clique com o botão direito → `Add` → `Sampler` → `HTTP Request`.
+   - Configure a requisição para:
+      - **Method:** `POST`
+      - **Server Name or IP:** `localhost`
+      - **Port Number:** `8080` (ou a porta da sua aplicação)
+      - **Path:** `/orders`
+      - **Body Data:**
+        ```json
+        {
+            "externalId": "ORDER-${__Random(10000,99999)}",
+            "items": [
+                {
+                    "productId": 1,
+                    "productName": "Vinho Branco",
+                    "quantity": 4,
+                    "price": 25.00
+                },
+                {
+                    "productId": 2,
+                    "productName": "Rum Prata",
+                    "quantity": 3,
+                    "price": 35.00
+                }
+            ],
+            "createdAt": "2025-02-19T15:00:00"
+        }
+        ```
+      - Aqui usamos **`${__Random(10000,99999)}`** para gerar um **externalId** dinâmico.
+
+
+4. **Adicionar o Header Idempotency-Key**
+   - Dentro do **HTTP Request**, clique com o botão direito → `Add` → `Config Element` → `HTTP Header Manager`.
+   - Adicione um novo header:
+      - **Name:** `Idempotency-Key`
+      - **Value:** `${__UUID}`
+
+   - **Explicação**: `${__UUID}` gera um **UUID único** a cada requisição, garantindo que o **Idempotency-Key** não seja reutilizado.
+ 
+
+5. **Adicionar um PreProcessor para Gerar a Idempotency-Key**
+   - Dentro do **HTTP Request**, clique com o botão direito → `Add` → `Pre Processors` → `JSR223 PreProcessor`.
+   - No campo **"Script"**, insira o seguinte código:
       ```groovy
-      vars.put("externalId", "ORDER-" + (10000 + new Random().nextInt(90000)));
-      ```
-    - E use no body da requisição:
-      ```json
-      { "externalId": "${externalId}", "items": "[...]" }
-      ```
-4. **Execute o teste e analise os resultados!** 🚀
+     vars.put("IDEMPOTENCY_KEY", java.util.UUID.randomUUID().toString());
+
+5. **Adicionar um Listener para Visualizar Respostas**
+   - Clique com o botão direito no **Thread Group** → `Add` → `Listener` → `View Results Tree`.
+
+
+6. **Executar o Teste**
+   - Clique no **Play (▶️)** no topo do JMeter para rodar o teste.
+
+### **🛠 Exemplo de Header Dinâmico no JMeter**
+| Header Key       | Header Value          |
+|-----------------|----------------------|
+| `Content-Type`  | `application/json`   |
+| `Idempotency-Key` | `${__UUID}`          |
+
+### **🎯 Benefícios**
+✅ Garante que cada requisição de criação de pedido tenha um **Idempotency-Key único**.  
+✅ Evita erros **409 Conflict** causados por reutilização da chave.  
+✅ Simula cenários reais de alta concorrência sem colisões de chave.
+
+
 
 ---
 
