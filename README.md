@@ -38,7 +38,7 @@ e no sistema B, Kafka. NoSQL para armazenar pedidos e um cache Redis para otimiz
    docker-compose up --build
    ```
 
-3. A API estará disponível em `http://localhost:8080`.
+3. A API estará disponível em `http://localhost:8080/v1/api`.
 ---
 
 ## Endpoints Principais
@@ -49,7 +49,7 @@ Este endpoint permite a criação de um novo pedido. Para garantir a idempotênc
 
 ### **📌 Requisição**
 **URL:**  
-`POST /orders`
+`POST v1/api//orders`
 
 **Headers:**
 ```http
@@ -75,7 +75,7 @@ Idempotency-Key: a1b2c3d4-e5f6-7890-ab12-cd34ef56gh78
 
 ### Buscar Pedido por ID
 ```http
-GET /api/orders/{externalId}
+GET v1/api/orders/{externalId}
 ```
 
 ---
