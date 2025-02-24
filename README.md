@@ -49,12 +49,12 @@ Este endpoint permite a criação de um novo pedido. Para garantir a idempotênc
 
 ### **📌 Requisição**
 **URL:**  
-`POST v1/api//orders`
+`POST v1/api/orders`
 
 **Headers:**
 ```http
 Content-Type: application/json
-Idempotency-Key: a1b2c3d4-e5f6-7890-ab12-cd34ef56gh78
+Idempotency-Key: a1b2c3d4-e5f6-7890
 ````
 
 #### Request Body
@@ -151,7 +151,7 @@ Para testar a criação de pedidos no **JMeter**, precisamos adicionar um **head
 | `Content-Type`  | `application/json`   |
 | `Idempotency-Key` | `${__UUID}`          |
 
-### **🎯 Benefícios**
+### ** Benefícios**
 ✅ Garante que cada requisição de criação de pedido tenha um **Idempotency-Key único**.  
 ✅ Evita erros **409 Conflict** causados por reutilização da chave.  
 ✅ Simula cenários reais de alta concorrência sem colisões de chave.
