@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "3254ae67-238d-48b7-9301-07157cfd5c72",
+		"name": "order-service-postman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4837786"
+	},
+	"item": [
+		{
+			"name": "find all orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/orders",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find order by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/orders/order/ORDER-425781",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"orders",
+						"order",
+						"ORDER-425781"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find order by status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/orders/status/PROCESSED",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"orders",
+						"status",
+						"PROCESSED"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order-00001",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Idempotency-Key",
+						"value": "order-128364352-mts",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"externalId\": \"ORDER-12345\",\r\n    \"items\": [\r\n        {\r\n            \"productId\": 1,\r\n            \"productName\": \"Vinho Branco\",\r\n            \"quantity\": 4,\r\n            \"price\": 25.00\r\n        },\r\n        {\r\n            \"productId\": 2,\r\n            \"productName\": \"Rum Prata\",\r\n            \"quantity\": 3,\r\n            \"price\": 35.00\r\n        }\r\n    ],\r\n    \"createdAt\": \"2025-02-19T15:00:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/orders",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order-00002 - NO IDEMPOTENCY-KEY",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Idempotency-Key",
+						"value": "order-11222333-mts",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"externalId\": \"ORDER-456789\",\r\n    \"items\": [\r\n        {\r\n            \"productId\": 3,\r\n            \"productName\": \"Whisky 12 anos\",\r\n            \"quantity\": 2,\r\n            \"price\": 150.00\r\n        },\r\n        {\r\n            \"productId\": 4,\r\n            \"productName\": \"Cerveja Brahma Duplo Malte\",\r\n            \"quantity\": 6,\r\n            \"price\": 5.49\r\n        }\r\n    ],\r\n    \"createdAt\": \"2025-02-20T10:30:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/orders",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order-00003",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"externalId\": \"ORDER-55444\",\r\n    \"items\": [\r\n        {\r\n            \"productId\": 5,\r\n            \"productName\": \"Brahma Chopp\",\r\n            \"quantity\": 24,\r\n            \"price\": 4.49\r\n        }\r\n    ],\r\n    \"status\": \"SHIPPED\",\r\n    \"createdAt\": \"2025-02-18T18:45:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/orders",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
