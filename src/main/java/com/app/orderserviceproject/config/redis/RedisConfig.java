@@ -53,7 +53,7 @@ public class RedisConfig {
     @Bean
     public RedisCacheConfiguration cacheConfiguration(GenericJackson2JsonRedisSerializer redisSerializer) {
         return RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(5))
+                .entryTtl(Duration.ofMinutes(50))
                 .disableCachingNullValues()
                 .serializeValuesWith(
                         RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer)
@@ -66,7 +66,7 @@ public class RedisConfig {
     @Bean
     public RedisCacheConfiguration idempotencyCacheConfig(GenericJackson2JsonRedisSerializer redisSerializer) {
         return RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(7)) // Expiração maior para Idempotency Key
+                .entryTtl(Duration.ofMinutes(50)) // Expiração maior para Idempotency Key
                 .disableCachingNullValues()
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer));
     }

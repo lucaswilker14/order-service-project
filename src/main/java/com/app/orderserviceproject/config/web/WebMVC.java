@@ -1,6 +1,6 @@
 package com.app.orderserviceproject.config.web;
 
-import com.app.orderserviceproject.adapter.output.redis.RedisIdempotencyPort;
+import com.app.orderserviceproject.adapter.output.redis.RedisPort;
 import com.app.orderserviceproject.domain.service.OrderService;
 import com.app.orderserviceproject.port.input.OrderServicePort;
 import com.app.orderserviceproject.port.output.KafkaOrderPort;
@@ -13,7 +13,7 @@ public class WebMVC {
 
     @Bean
     public OrderServicePort orderService(OrderRepositoryPort orderRepositoryPort, KafkaOrderPort kafkaOrderPort,
-                                         RedisIdempotencyPort idempotencyPort) {
+                                         RedisPort idempotencyPort) {
         return new OrderService(orderRepositoryPort, kafkaOrderPort, idempotencyPort);
     }
 

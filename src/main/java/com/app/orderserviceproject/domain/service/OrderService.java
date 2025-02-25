@@ -1,6 +1,6 @@
 package com.app.orderserviceproject.domain.service;
 
-import com.app.orderserviceproject.adapter.output.redis.RedisIdempotencyPort;
+import com.app.orderserviceproject.adapter.output.redis.RedisPort;
 import com.app.orderserviceproject.domain.exceptions.OrderDuplicateException;
 import com.app.orderserviceproject.domain.exceptions.OrderNotFoundException;
 import com.app.orderserviceproject.domain.model.Order;
@@ -24,11 +24,11 @@ public class OrderService implements OrderServicePort {
 
     private final KafkaOrderPort kafkaOrderPort;
 
-    private final RedisIdempotencyPort idempotencyPort;
+    private final RedisPort idempotencyPort;
 
 
     public OrderService(OrderRepositoryPort orderRepositoryPort, KafkaOrderPort kafkaOrderPort,
-                        RedisIdempotencyPort idempotencyPort) {
+                        RedisPort idempotencyPort) {
         this.orderRepositoryPort = orderRepositoryPort;
         this.kafkaOrderPort = kafkaOrderPort;
         this.idempotencyPort = idempotencyPort;

@@ -2,7 +2,7 @@ package com.app.orderserviceproject.adapter.output.redis;
 
 import com.app.orderserviceproject.domain.model.Order;
 
-public interface RedisIdempotencyPort {
+public interface RedisPort {
 
     Order validadeIdempotencyKey(String idempotencyKey);
 
